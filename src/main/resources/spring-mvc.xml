@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd ">
+	 
+	 <!-- 配置视图解析器 -->
+     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+         <!-- 使用前缀和后缀 -->
+         <property name="prefix" value="/"></property>
+         <property name="suffix" value=".jsp"></property>
+     </bean>
+     
+    <!-- 使用Annotation自动注册Bean,扫描@Controller和@ControllerAdvice-->
+	<context:component-scan base-package="com.kxy.demo.controller, com.kxy.demo.exception" use-default-filters="false">
+	    <!-- base-package 如果多个，用“,”分隔 -->
+	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	    <!--控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常-->
+	    <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+     
+     <!--  开启注解的功能，当使用了context:component-scan时，这个可以省略
+     <context:annotation-config></context:annotation-config>
+     -->
+     
+    <!-- 配置注解的处理器映射器和处理器适配器-->
+    <mvc:annotation-driven>
+    	<mvc:message-converters>
+    		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+    		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+    	</mvc:message-converters>
+    </mvc:annotation-driven>
+     
+    <!-- 自定义参数类型绑定
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+     <property name="converters">
+         <list>
+             	 日期类型绑定
+                 http://www.jb51.net/article/108516.htm
+             	<bean class="com.wxisme.ssm.controller.converter.DateConverter"/>
+         </list>
+     </property>
+    </bean>
+     -->
+    
+    <!-- 访问静态资源文件 -->
+    <!-- <mvc:default-servlet-handler/> 需要在web.xml中配置-->
+    
+    <mvc:resources mapping="/images/**" location="/images/" />
+    <mvc:resources mapping="/css/**" location="/css/" />  
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/imgdata/**" location="/imgdata/" />
+    
+    <!-- API 接口跨域配置 --> 
+    <mvc:cors>
+    	<mvc:mapping path="/api/**" 
+    			allowed-origins="*"  
+                allowed-methods="POST, GET, OPTIONS, DELETE, PUT"  
+                allowed-headers="Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"  
+                allow-credentials="true"/> 
+                 <!-- max-age="1"  -->
+                 <!-- exposed-headers=""-->
+    </mvc:cors>
+    <!--  
+    Access-Control-Expose-Headers该字段可选。
+    CORS请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：
+    Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。
+         如果想拿到其他字段，就必须在Access-Control-Expose-Headers里面指定。上面的例子指定，getResponseHeader('FooBar')可以返回FooBar字段的值。
+         
+    Access-Control-Max-Age该字段可选，用来指定本次预检请求的有效期，单位为秒。(预检是浏览器先发一条请求，看是否能正常访问，如果能，则正式发送请求)
+    spring mvc默认预检的时间是30min
+          有效期是20天（1728000秒），即允许缓存该条回应1728000秒（即20天），在此期间，不用发出另一条预检请求。
+    -->
+    
+    <!--配置上传文件数据解析器  -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize">
+            <value>9242880</value>
+        </property>
+    </bean>
+    
+    <!-- 定义全局异常处理器 -->
+    <!-- 只有一个全局异常处理器起作用 -->
+    <!--  
+    <bean id="exceptionResolver" class="com.wxisme.ssm.exception.OverallExceptionResolver"></bean>
+    -->
+    
+ </beans>
