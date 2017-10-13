@@ -53,5 +53,10 @@ public class User {
 	public User() {
 		super();
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", parentId=" + parentId + ", level=" + level + "]";
+	}
 	
 }
