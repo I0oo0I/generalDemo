@@ -13,6 +13,7 @@
       <spring.version>4.3.8.RELEASE</spring.version>
       <mybatis.version>3.2.8</mybatis.version>
       <fasterJackson.version>2.9.0</fasterJackson.version>
+      <jdk.version>1.8</jdk.version>
   </properties>
   
    <dependencies>
@@ -249,6 +250,15 @@
                 </dependency>
              </dependencies>
             </plugin>
+            <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <version>3.5.1</version>
+		        <configuration>
+		            <source>${jdk.version}</source>
+		            <target>${jdk.version}</target>
+		        </configuration>
+		    </plugin>
         </plugins>  
   </pluginManagement> 
   </build>
