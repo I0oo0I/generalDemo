@@ -219,6 +219,13 @@
 	    <artifactId>jmimemagic</artifactId>
 	    <version>0.1.5</version>
 	</dependency>
+	
+	<!-- cglib 用于beanCopier-->
+	<dependency>  
+        <groupId>cglib</groupId>  
+        <artifactId>cglib-nodep</artifactId>  
+        <version>3.2.5</version>
+    </dependency>  
   </dependencies>
 
   <build>
