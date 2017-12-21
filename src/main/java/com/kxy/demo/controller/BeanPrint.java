@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InstantiationTracingBeanPostProcessor implements BeanPostProcessor {  
+public class BeanPrint implements BeanPostProcessor {  
   
     // simply return the instantiated bean as-is  
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {  

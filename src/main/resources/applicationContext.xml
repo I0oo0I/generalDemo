@@ -64,4 +64,33 @@
         <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.kxy.demo.service.*.*(..))"/>
     </aop:config>
     
-</beans>
+    <!-- 配置JMS连接工厂 -->
+    <!-- 使用JMS发送和接受消息，使用ActiveMQ作为代理，不论是点对点还是发布订阅都消息都想到代理 -->
+    <!-- 默认情况下， ActiveMQConnectionFactory会假设 ActiveMQ监听localhost的61616端口, 可以用brokerURL设置代理的url-->
+    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+    	<property name="brokerURL" value="tcp://localhost:61616"></property>
+    </bean>
+    
+    <!-- 设置消息的目的地，可以是点对点的队列，或者订阅/发布的主题 -->
+    <!-- 队列是一对一的消息 ，消息通道的名称是 spitter.queue， 这个名字可以随便写-->
+    <bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
+    	<constructor-arg value="user.queue"></constructor-arg>
+    </bean>
+    
+    <!-- 主题是一对多的消息，消息通道的名称是 spitter.topic -->
+    <bean id="topic" class="org.apache.activemq.command.ActiveMQTopic">
+    	<constructor-arg value="user.topic"></constructor-arg>
+    </bean>
+    
+    <!-- jms模板，代替jms本身的不友好的代码 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    	<constructor-arg ref="connectionFactory"></constructor-arg>
+    	<!-- 自定默认的目的地，这样在 jmsOperations.send时，可以不用指定目的地 -->
+		<property name="defaultDestinationName" value="user.queue"></property>
+		<!-- 修改默认的转换器为json转换器 -->
+		<!--<property name="messageConverter" ref="messageConvert"></property>  -->  
+	</bean>
+	
+	<!-- jms, 使用json的消息转换器 -->
+	<bean id="messageConvert" class="org.springframework.jms.support.converter.MappingJackson2MessageConverter"></bean>
+</beans> 

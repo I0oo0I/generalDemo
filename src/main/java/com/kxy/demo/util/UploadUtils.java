@@ -27,7 +27,6 @@ public class UploadUtils {
 	 * @return
 	 */
 	 public static Map<String, String> upload2(HttpServletRequest request, HttpServletResponse response, String path, String folderName){  
-		    System.out.println("2");   
 		    //创建通用的多部分解析?  
 	        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
 	        Map<String, String> map = new HashMap<String, String>();

@@ -1,6 +1,14 @@
 package com.kxy.demo.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5586852736991073397L;
+	
 
 	private String id;
 	
